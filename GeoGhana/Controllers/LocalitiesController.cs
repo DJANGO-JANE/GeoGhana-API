@@ -45,11 +45,11 @@ namespace GeoGhana.Controllers
                 return Ok(_mapper.Map<LocalityView>(result));
                         
         }
-        [HttpGet("{locality}", Name = "SearchLocality")]
+        [HttpGet("{localityName}", Name = "SearchLocality")]
 
-        public async Task<ActionResult<LocalityView>> SearchLocalityByName(string locality)
+        public async Task<ActionResult<LocalityView>> SearchLocalityByName(string localityName)
         {
-            var request = await _service.SearchLocalityByName(locality);
+            var request = await _service.SearchLocalityByName(localityName);
             if (request == null)
             {
                 return NotFound();
@@ -104,10 +104,10 @@ namespace GeoGhana.Controllers
         }
 
 
-        [HttpPut("{code}")]
-        public async Task<ActionResult> UpdateLocalityInfo(string code, LocalityUpdate localityToUpdate)
+        [HttpPut("{localityCode}")]
+        public async Task<ActionResult> UpdateLocalityInfo(string localityCode, LocalityUpdate localityToUpdate)
         {
-            var localityModel = await _service.SearchLocalityByName(code);
+            var localityModel = await _service.SearchLocalityByName(localityCode);
             if (localityModel == null)
             {
                 return NotFound();
@@ -118,13 +118,13 @@ namespace GeoGhana.Controllers
             _service.UpdateLocality(localityModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchLocalityByName(code));
+            return Ok(_service.SearchLocalityByName(localityCode));
         }
 
-        [HttpPatch("{code}")]
-        public async Task<ActionResult> PartialUpdatelocality(string code, JsonPatchDocument<LocalityUpdate> patchDoc)
+        [HttpPatch("{localityCode}")]
+        public async Task<ActionResult> PartialUpdatelocality(string localityCode, JsonPatchDocument<LocalityUpdate> patchDoc)
         {
-            var localityModel = await _service.SearchLocalityByName(code);
+            var localityModel = await _service.SearchLocalityByName(localityCode);
             if (localityModel == null)
             {
                 return NotFound();
@@ -142,7 +142,7 @@ namespace GeoGhana.Controllers
             _service.UpdateLocality(localityModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchLocalityByName(code));
+            return Ok(_service.SearchLocalityByName(localityCode));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace GeoGhana.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RegionsController : Controller
+    public class RegionsController : ControllerBase
     {
         private readonly IRegion _service;
         private readonly IMapper _mapper;
@@ -27,28 +27,33 @@ namespace GeoGhana.Controllers
         }
 
         #region Get Methods
-
         [HttpGet]
+        // GET: api/Regions
         public async Task<ActionResult<IEnumerable<RegionView>>> Get()
         {
             var result = await _service.GetAllRegions();
             return Ok(_mapper.Map<IEnumerable<RegionView>>(result));
         }
 
-
-        [HttpGet]
-        [Route("Complete")]
+        /// <summary>
+        /// Gets full details of Regions
+        /// </summary>
+        /// <returns>List of detailed Regions</returns>
+        [HttpGet("Complete")]
         public async Task<ActionResult<IEnumerable<RegionFull>>> GetRegionsComplete()
         {
             var result = await _service.GetAllRegions();
             return Ok(_mapper.Map<IEnumerable<RegionFull>>(result));
         }
 
-        [HttpGet]
-        [Route("SearchByCode",Name = "SearchByRegCode")]
-        public async Task<ActionResult<RegionFull>> SearchByRegCodeAsync([FromQuery(Name = "code")] string code)
+        /// <summary>
+        /// Search Region By Code
+        /// </summary>
+        /// <returns>Region</returns>
+        [HttpGet("SearchByCode",Name = "SearchByRegCode")]
+        public async Task<ActionResult<RegionFull>> SearchByRegCodeAsync([FromQuery(Name = "code")] string regionCode)
         {
-            var request = await _service.SearchRegionByCode(code);
+            var request = await _service.SearchRegionByCode(regionCode);
             if (request == null)
             {
                 return NotFound();
@@ -69,8 +74,7 @@ namespace GeoGhana.Controllers
 
         #endregion
 
-        [HttpPost]
-        [Route("Add")] 
+        [HttpPost("Add")]
         public async Task<ActionResult<RegionAdd>> AddRegionInfo([FromBody] RegionAdd regionToAdd)
         {
             var regModel = _mapper.Map<Region>(regionToAdd);
@@ -91,7 +95,7 @@ namespace GeoGhana.Controllers
 
                 return CreatedAtRoute(
                                         "SearchByRegCode",
-                                        new { code = regReadDto.RegionCode },
+                                        new { regionCode = regReadDto.RegionCode },
                                         regReadDto
                                         );
             }
@@ -101,10 +105,10 @@ namespace GeoGhana.Controllers
             }
         }
 
-        [HttpPut("{code}")]
-        public async Task<ActionResult> UpdateRegionInfoAsync(string code, RegionUpdate regionToUpdate)
+        [HttpPut("{regionCode}")]
+        public async Task<ActionResult> UpdateRegionInfoAsync(string regionCode, RegionUpdate regionToUpdate)
         {
-            var regModel = await _service.SearchRegionByCode(code);
+            var regModel = await _service.SearchRegionByCode(regionCode);
             if (regModel == null)
             {
                 return NotFound();
@@ -114,13 +118,13 @@ namespace GeoGhana.Controllers
             _service.UpdateRegion(regModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchRegionByCode(code));
+            return Ok(_service.SearchRegionByCode(regionCode));
         }
 
-        [HttpPatch("{code}")]
-        public async Task<ActionResult> PartialUpdateRegionAsync(string code, JsonPatchDocument<RegionUpdate> patchDoc)
+        [HttpPatch("{regionCode}")]
+        public async Task<ActionResult> PartialUpdateRegionAsync(string regionCode, JsonPatchDocument<RegionUpdate> patchDoc)
         {
-            var regionModel = await _service.SearchRegionByCode(code);
+            var regionModel = await _service.SearchRegionByCode(regionCode);
             if (regionModel == null)
             {
                 return NotFound();
@@ -138,14 +142,13 @@ namespace GeoGhana.Controllers
             _service.UpdateRegion(regionModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchRegionByCode(code));
+            return Ok(_service.SearchRegionByCode(regionCode));
         }
 
-        [Route("Remove")]
-        [HttpDelete("{code}")]
-        public async Task<ActionResult> DeleteRegionAsync(string code)
+        [HttpDelete("{regionCode}")]
+        public async Task<ActionResult> DeleteRegionAsync(string regionCode)
         {
-            var regModel = await _service.SearchRegionByCode(code);
+            var regModel = await _service.SearchRegionByCode(regionCode);
             if (regModel == null)
             {
                 return NotFound();

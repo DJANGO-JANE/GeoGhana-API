@@ -48,10 +48,10 @@ namespace GeoGhana.Controllers
                 return NotFound();
             }
         }
-        [HttpGet("{city}", Name = "SearchCity")]
-        public async Task<ActionResult<CityFull>> SearchCityByName(int city)
+        [HttpGet("{cityCode}", Name = "SearchCity")]
+        public async Task<ActionResult<CityFull>> SearchCityByName(int cityCode)
         {
-            var request = await _service.SearchCityByCode(city);
+            var request = await _service.SearchCityByCode(cityCode);
             if (request == null)
             {
                 return NotFound();
@@ -80,10 +80,10 @@ namespace GeoGhana.Controllers
         }
 
 
-        [HttpPut("{code}")]
-        public async Task<ActionResult> UpdateCityInfo(int code, CityUpdate cityToUpdate)
+        [HttpPut("{cityCode}")]
+        public async Task<ActionResult> UpdateCityInfo(int cityCode, CityUpdate cityToUpdate)
         {
-            var cityModel = await _service.SearchCityByCode(code);
+            var cityModel = await _service.SearchCityByCode(cityCode);
             if (cityModel == null)
             {
                 return NotFound();
@@ -93,13 +93,13 @@ namespace GeoGhana.Controllers
             _service.UpdateCity(cityModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchCityByCode(code));
+            return Ok(_service.SearchCityByCode(cityCode));
         }
 
-        [HttpPatch("{code}")]
-        public async Task<ActionResult> PartialUpdateCity(int code, JsonPatchDocument<CityUpdate> patchDoc)
+        [HttpPatch("{cityCode}")]
+        public async Task<ActionResult> PartialUpdateCity(int cityCode, JsonPatchDocument<CityUpdate> patchDoc)
         {
-            var cityModel = await _service.SearchCityByCode(code);
+            var cityModel = await _service.SearchCityByCode(cityCode);
             if (cityModel == null)
             {
                 return NotFound();
@@ -117,13 +117,13 @@ namespace GeoGhana.Controllers
             _service.UpdateCity(cityModel);
             _service.SaveChanges();
 
-            return Ok(_service.SearchCityByCode(code));
+            return Ok(_service.SearchCityByCode(cityCode));
         }
 
-        [HttpDelete("{code}")]
-        public async Task<ActionResult> DeleteCity(int code)
+        [HttpDelete("{cityCode}")]
+        public async Task<ActionResult> DeleteCity(int cityCode)
         {
-            var cityModel = await _service.SearchCityByCode(code);
+            var cityModel = await _service.SearchCityByCode(cityCode);
             if (cityModel == null)
             {
                 return NotFound();

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GeoGhana</name>
+    </assembly>
+    <members>
+        <member name="M:GeoGhana.Controllers.RegionsController.GetRegionsComplete">
+            <summary>
+            Gets full details of Regions
+            </summary>
+            <returns>List of detailed Regions</returns>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.SearchByRegCodeAsync(System.String)">
+            <summary>
+            Search Region By Code
+            </summary>
+            <returns>Region</returns>
+        </member>
+    </members>
+</doc>
