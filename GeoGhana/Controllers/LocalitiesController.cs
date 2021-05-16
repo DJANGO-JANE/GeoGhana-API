@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace GeoGhana.Controllers
 {
+    /// <summary>
+    /// Localities in GeoGhana API
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class LocalitiesController : Controller
@@ -24,6 +27,9 @@ namespace GeoGhana.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets list of all Localities in GeoGhana API
+        /// </summary>
         [HttpGet]
         public ActionResult<IEnumerable<LocalityView>> Get()
         {
@@ -32,6 +38,9 @@ namespace GeoGhana.Controllers
             return Ok(_mapper.Map<IEnumerable<LocalityView>>(result));
         }
 
+        /// <summary>
+        /// Find a Locality in Ghana using postcode
+        /// </summary>
         [HttpGet]
         [Route("Postcode")]
         public async Task<ActionResult<LocalityView>> FindByPostCode([FromQuery(Name = "code")] string code)
@@ -45,8 +54,11 @@ namespace GeoGhana.Controllers
                 return Ok(_mapper.Map<LocalityView>(result));
                         
         }
-        [HttpGet("{localityName}", Name = "SearchLocality")]
 
+        /// <summary>
+        /// Search Locality by name
+        /// </summary>
+        [HttpGet("{localityName}", Name = "SearchLocality")]
         public async Task<ActionResult<LocalityView>> SearchLocalityByName(string localityName)
         {
             var request = await _service.SearchLocalityByName(localityName);
@@ -57,6 +69,9 @@ namespace GeoGhana.Controllers
             return Ok(_mapper.Map<LocalityView>(request));
         }
 
+        /// <summary>
+        /// Query for Localities using all or part of name
+        /// </summary>
         [HttpGet]
         [Route("Query")]
         public async Task<ActionResult<IEnumerable<LocalityView>>> GetAllLocalities(
@@ -70,40 +85,41 @@ namespace GeoGhana.Controllers
             return Ok(_mapper.Map<IEnumerable<LocalityView>>(request));
         }
 
+        /// <summary>
+        /// Add new Locality to GeoGhana API
+        /// </summary>
         [Route("Add")]
         [HttpPost]
         public async Task<ActionResult<LocalityAdd>> AddLocalityInfo(
             [FromBody] LocalityAdd localityToAdd)
         {
             var duplicates = await _service.QueryLocalityName(localityToAdd.Name);
-            if (duplicates.Any())
+            if (!duplicates.Any())
             {
-                foreach (var item in duplicates)
-                {
+                var localityModel = _mapper.Map<Locality>(localityToAdd);
 
-                    if (item.City.Name != localityToAdd.CityName)
-                    {
-                        var localityModel = _mapper.Map<Locality>(localityToAdd);
+                _service.AddNewLocality(localityModel);
+                _service.SaveChanges();
 
-                        _service.AddNewLocality(localityModel);
-                        _service.SaveChanges();
-
-                        return Ok();
-                    } 
-                    else if (item.City.Name == localityToAdd.CityName)
-                    {
-                        return BadRequest($"{localityToAdd.CityName} already contains {localityToAdd.Name}.");
-                    }
-                }
-                return NoContent();
+                 return Ok();
             }
             else
             {
-                return Ok();
+                foreach (var item in duplicates)
+                {
+                   if (item.City.Name == localityToAdd.CityName)
+                    {
+                        throw new ApplicationException("Duplicate locality in the same city found.");
+                    }
+                }
+                    return BadRequest($"{localityToAdd.CityName} already contains {localityToAdd.Name}.");
             }
+            
         }
 
-
+        /// <summary>
+        /// Insert Locality to GeoGhana API
+        /// </summary>
         [HttpPut("{localityCode}")]
         public async Task<ActionResult> UpdateLocalityInfo(string localityCode, LocalityUpdate localityToUpdate)
         {
@@ -121,6 +137,9 @@ namespace GeoGhana.Controllers
             return Ok(_service.SearchLocalityByName(localityCode));
         }
 
+        /// <summary>
+        /// Modify part of Locality information
+        /// </summary>
         [HttpPatch("{localityCode}")]
         public async Task<ActionResult> PartialUpdatelocality(string localityCode, JsonPatchDocument<LocalityUpdate> patchDoc)
         {
@@ -143,6 +162,22 @@ namespace GeoGhana.Controllers
             _service.SaveChanges();
 
             return Ok(_service.SearchLocalityByName(localityCode));
+        }
+
+        /// <summary>
+        /// Remove Locality from GeoGhana API.
+        /// </summary>
+        [HttpDelete("{postCode}")]
+        public async Task<ActionResult> RemoveLocality(string postcode)
+        {
+            var request = await _service.SearchPostCode(postcode);
+            if (request == null)
+            {
+                return BadRequest();
+            }
+                _service.DeleteLocality(request);
+                _service.SaveChanges();
+                return NoContent();
         }
     }
 }

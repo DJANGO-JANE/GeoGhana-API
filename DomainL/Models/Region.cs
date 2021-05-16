@@ -18,7 +18,7 @@ namespace DomainL.Models
         [MaxLength(30)]
         public string CapitalCity { get; set; }
 
-        public ICollection<City> Cities { get; set; }
-        public ICollection<Locality> Localities { get; set; }
+        public virtual ICollection<City> Cities { get; set; }
+        public virtual ICollection<Locality> Localities { get; set; }
     }
 }

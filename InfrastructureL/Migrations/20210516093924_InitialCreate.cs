@@ -24,10 +24,10 @@ namespace InfrastructureL.Migrations
                 columns: table => new
                 {
                     CityCode = table.Column<int>(type: "int", maxLength: 2, nullable: false)
-                        .Annotation("SqlServer:Identity", "11, 1"),
+                        .Annotation("SqlServer:Identity", "10, 1"),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     RegionName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    RegionCode = table.Column<string>(type: "nvarchar(3)", nullable: true)
+                    RegionCode = table.Column<string>(type: "nvarchar(3)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,7 @@ namespace InfrastructureL.Migrations
                         column: x => x.RegionCode,
                         principalTable: "RegionsGH",
                         principalColumn: "RegionCode",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,7 +51,7 @@ namespace InfrastructureL.Migrations
                     RegionName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     LocalityCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
                     RegionCode = table.Column<string>(type: "nvarchar(3)", nullable: true),
-                    CityCode = table.Column<int>(type: "int", nullable: true)
+                    CityCode = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace InfrastructureL.Migrations
                         column: x => x.CityCode,
                         principalTable: "CitiesGH",
                         principalColumn: "CityCode",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LocalitiesGH_RegionsGH_RegionCode",
                         column: x => x.RegionCode,

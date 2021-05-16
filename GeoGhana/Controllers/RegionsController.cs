@@ -13,9 +13,12 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace GeoGhana.Controllers
 {
+    /// <summary>
+    /// Regions in GeoGhana API
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class RegionsController : ControllerBase
+    public class RegionsController : Controller
     {
         private readonly IRegion _service;
         private readonly IMapper _mapper;
@@ -27,8 +30,11 @@ namespace GeoGhana.Controllers
         }
 
         #region Get Methods
+
+        /// <summary>
+        /// Gets list of all Regions in GeoGhana API
+        /// </summary>
         [HttpGet]
-        // GET: api/Regions
         public async Task<ActionResult<IEnumerable<RegionView>>> Get()
         {
             var result = await _service.GetAllRegions();
@@ -38,7 +44,7 @@ namespace GeoGhana.Controllers
         /// <summary>
         /// Gets full details of Regions
         /// </summary>
-        /// <returns>List of detailed Regions</returns>
+
         [HttpGet("Complete")]
         public async Task<ActionResult<IEnumerable<RegionFull>>> GetRegionsComplete()
         {
@@ -47,9 +53,8 @@ namespace GeoGhana.Controllers
         }
 
         /// <summary>
-        /// Search Region By Code
+        /// Search for Region by region code
         /// </summary>
-        /// <returns>Region</returns>
         [HttpGet("SearchByCode",Name = "SearchByRegCode")]
         public async Task<ActionResult<RegionFull>> SearchByRegCodeAsync([FromQuery(Name = "code")] string regionCode)
         {
@@ -60,6 +65,11 @@ namespace GeoGhana.Controllers
             }
             return Ok(_mapper.Map<RegionFull>(request));
         }
+
+        /// <summary>
+        /// Query for Region using all or part of name
+        /// </summary>
+
         [HttpGet]
         [Route("Query")]
         public async Task<ActionResult<IEnumerable<RegionView>>> SearchRegionLike([FromQuery(Name = "name")] string name)
@@ -74,13 +84,29 @@ namespace GeoGhana.Controllers
 
         #endregion
 
+        /// <summary>
+        /// Add new Region to GeoGhana API
+        /// </summary>
         [HttpPost("Add")]
         public async Task<ActionResult<RegionAdd>> AddRegionInfo([FromBody] RegionAdd regionToAdd)
         {
             var regModel = _mapper.Map<Region>(regionToAdd);
-            var duplicate = await _service.QueryRegionName(regionToAdd.Name);
-            if (!duplicate.Any())
+            var temp = await _service.QueryRegionName(regionToAdd.Name);
+            List<Region> duplicate = null;
+            var rName = regionToAdd.Name.ToUpper();
+            if (temp.Any())
             {
+                foreach (var item in temp)
+                {
+                    if (item.Name.ToUpper() == rName)
+                    {
+                        duplicate.Add(item);
+                    }
+                } 
+            }
+            if (duplicate == null)
+            {
+
                 try
                 {
                     _service.AddNewRegion(regModel);
@@ -101,10 +127,15 @@ namespace GeoGhana.Controllers
             }
             else
             {
-                return BadRequest($"{regionToAdd.Name} already exists.");
+               return BadRequest($"{regionToAdd.Name} already exists.");
+
             }
+
         }
 
+        /// <summary>
+        /// Insert Region to GeoGhana API
+        /// </summary>
         [HttpPut("{regionCode}")]
         public async Task<ActionResult> UpdateRegionInfoAsync(string regionCode, RegionUpdate regionToUpdate)
         {
@@ -121,6 +152,9 @@ namespace GeoGhana.Controllers
             return Ok(_service.SearchRegionByCode(regionCode));
         }
 
+        /// <summary>
+        /// Modify part of Region information
+        /// </summary>
         [HttpPatch("{regionCode}")]
         public async Task<ActionResult> PartialUpdateRegionAsync(string regionCode, JsonPatchDocument<RegionUpdate> patchDoc)
         {
@@ -145,6 +179,9 @@ namespace GeoGhana.Controllers
             return Ok(_service.SearchRegionByCode(regionCode));
         }
 
+        /// <summary>
+        /// Remove Region from GeoGhana API.
+        /// </summary>
         [HttpDelete("{regionCode}")]
         public async Task<ActionResult> DeleteRegionAsync(string regionCode)
         {

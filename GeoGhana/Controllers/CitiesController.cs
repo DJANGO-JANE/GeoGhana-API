@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace GeoGhana.Controllers
 {
+    /// <summary>
+    /// Cities in GeoGhana API
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CitiesController : Controller
@@ -25,6 +28,9 @@ namespace GeoGhana.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets list of all Cities in GeoGhana API
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityView>>> Get()
         {
@@ -33,6 +39,9 @@ namespace GeoGhana.Controllers
             return Ok(_mapper.Map<IEnumerable<CityView>>(result));
         }
 
+        /// <summary>
+        /// Query for City using all or part of name
+        /// </summary>
         [HttpGet]
         [Route("Query")]
         public async Task<ActionResult<IEnumerable<CityView>>> SearchCityLike([FromQuery(Name = "name")]string name)
@@ -48,6 +57,10 @@ namespace GeoGhana.Controllers
                 return NotFound();
             }
         }
+
+        /// <summary>
+        /// Search City by city code
+        /// </summary>
         [HttpGet("{cityCode}", Name = "SearchCity")]
         public async Task<ActionResult<CityFull>> SearchCityByName(int cityCode)
         {
@@ -59,7 +72,10 @@ namespace GeoGhana.Controllers
             return Ok(_mapper.Map<CityFull>(request));
         }
 
-        [Route("Add")]//api/[controller]/Add
+        /// <summary>
+        /// Add new City to GeoGhana API
+        /// </summary>
+        [Route("Add")]
         [HttpPost]
         public async Task<ActionResult<CityAdd>> AddCityInfo([FromBody] CityAdd cityToAdd)
         {
@@ -79,7 +95,9 @@ namespace GeoGhana.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Insert City to GeoGhana API
+        /// </summary>
         [HttpPut("{cityCode}")]
         public async Task<ActionResult> UpdateCityInfo(int cityCode, CityUpdate cityToUpdate)
         {
@@ -96,6 +114,9 @@ namespace GeoGhana.Controllers
             return Ok(_service.SearchCityByCode(cityCode));
         }
 
+        /// <summary>
+        /// Modify part of City information
+        /// </summary>
         [HttpPatch("{cityCode}")]
         public async Task<ActionResult> PartialUpdateCity(int cityCode, JsonPatchDocument<CityUpdate> patchDoc)
         {
@@ -120,6 +141,9 @@ namespace GeoGhana.Controllers
             return Ok(_service.SearchCityByCode(cityCode));
         }
 
+        /// <summary>
+        /// Remove City from GeoGhana API.
+        /// </summary>
         [HttpDelete("{cityCode}")]
         public async Task<ActionResult> DeleteCity(int cityCode)
         {

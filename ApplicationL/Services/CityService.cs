@@ -42,6 +42,7 @@ namespace ApplicationL.Services
         public void DeleteCity(City city)
         {
             _regionalContext.CitiesGH.Remove(city);
+            
         }
 
         public async Task<IEnumerable<City>> GetAllCities()

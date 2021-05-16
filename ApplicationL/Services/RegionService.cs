@@ -27,6 +27,7 @@ namespace ApplicationL.Services
             {
                 throw new ArgumentNullException(nameof(region));
             }
+            region.RegionCode = region.RegionCode.ToUpper();
             region.RegionCode += "X";
             _regionalContext.RegionsGH.Add(region);
         }

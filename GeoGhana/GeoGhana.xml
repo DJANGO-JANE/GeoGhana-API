@@ -4,17 +4,135 @@
         <name>GeoGhana</name>
     </assembly>
     <members>
+        <member name="T:GeoGhana.Controllers.CitiesController">
+            <summary>
+            Cities in GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.Get">
+            <summary>
+            Gets list of all Cities in GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.SearchCityLike(System.String)">
+            <summary>
+            Query for City using all or part of name
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.SearchCityByName(System.Int32)">
+            <summary>
+            Search City by city code
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.AddCityInfo(ApplicationL.DTOs.CityAdd)">
+            <summary>
+            Add new City to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.UpdateCityInfo(System.Int32,ApplicationL.DTOs.CityUpdate)">
+            <summary>
+            Insert City to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.PartialUpdateCity(System.Int32,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{ApplicationL.DTOs.CityUpdate})">
+            <summary>
+            Modify part of City information
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.CitiesController.DeleteCity(System.Int32)">
+            <summary>
+            Remove City from GeoGhana API.
+            </summary>
+        </member>
+        <member name="T:GeoGhana.Controllers.LocalitiesController">
+            <summary>
+            Localities in GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.Get">
+            <summary>
+            Gets list of all Localities in GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.FindByPostCode(System.String)">
+            <summary>
+            Find a Locality in Ghana using postcode
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.SearchLocalityByName(System.String)">
+            <summary>
+            Search Locality by name
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.GetAllLocalities(System.String)">
+            <summary>
+            Query for Localities using all or part of name
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.AddLocalityInfo(ApplicationL.DTOs.LocalityAdd)">
+            <summary>
+            Add new Locality to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.UpdateLocalityInfo(System.String,ApplicationL.DTOs.LocalityUpdate)">
+            <summary>
+            Insert Locality to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.PartialUpdatelocality(System.String,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{ApplicationL.DTOs.LocalityUpdate})">
+            <summary>
+            Modify part of Locality information
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.LocalitiesController.RemoveLocality(System.String)">
+            <summary>
+            Remove Locality from GeoGhana API.
+            </summary>
+        </member>
+        <member name="T:GeoGhana.Controllers.RegionsController">
+            <summary>
+            Regions in GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.Get">
+            <summary>
+            Gets list of all Regions in GeoGhana API
+            </summary>
+        </member>
         <member name="M:GeoGhana.Controllers.RegionsController.GetRegionsComplete">
             <summary>
             Gets full details of Regions
             </summary>
-            <returns>List of detailed Regions</returns>
         </member>
         <member name="M:GeoGhana.Controllers.RegionsController.SearchByRegCodeAsync(System.String)">
             <summary>
-            Search Region By Code
+            Search for Region by region code
             </summary>
-            <returns>Region</returns>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.SearchRegionLike(System.String)">
+            <summary>
+            Query for Region using all or part of name
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.AddRegionInfo(ApplicationL.DTOs.RegionAdd)">
+            <summary>
+            Add new Region to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.UpdateRegionInfoAsync(System.String,ApplicationL.DTOs.RegionUpdate)">
+            <summary>
+            Insert Region to GeoGhana API
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.PartialUpdateRegionAsync(System.String,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{ApplicationL.DTOs.RegionUpdate})">
+            <summary>
+            Modify part of Region information
+            </summary>
+        </member>
+        <member name="M:GeoGhana.Controllers.RegionsController.DeleteRegionAsync(System.String)">
+            <summary>
+            Remove Region from GeoGhana API.
+            </summary>
         </member>
     </members>
 </doc>

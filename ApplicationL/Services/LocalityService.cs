@@ -34,7 +34,7 @@ namespace ApplicationL.Services
                 Region = region,
                 CityName = locality.CityName,
                 City = city,
-                LocalityCode = locality.LocalityCode
+                LocalityCode = locality.LocalityCode.ToUpper()
                 
             };
 

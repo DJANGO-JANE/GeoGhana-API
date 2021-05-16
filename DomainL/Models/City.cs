@@ -21,7 +21,8 @@ namespace DomainL.Models
         [MaxLength(30)]
         public string RegionName { get; set; }
 
+        [Required]
         public virtual Region Region { get; set; }
-        public ICollection<Locality> Localities { get; set; }
+        public virtual ICollection<Locality> Localities { get; set; }
     }
 }

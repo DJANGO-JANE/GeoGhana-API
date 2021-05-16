@@ -40,6 +40,7 @@ namespace DomainL.Models
         [DisplayName("RegionCode")]
         public virtual Region Region { get; set; }
 
+        [Required]
         [DisplayName("CityCode")]
         public virtual City City { get; set; }
     }
